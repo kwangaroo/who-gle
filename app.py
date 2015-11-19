@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
-if __name__ == "__main___":
+if __name__ == "__main__":
     app.debug = True
     app.secret_key = "this is a secret key"
     app.run()
