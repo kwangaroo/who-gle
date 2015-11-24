@@ -76,21 +76,46 @@ print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-We
 ### WHEN
 
 def getDates(text):
-    """HEY KATHY, DONT BE A DUNCE AND FIX THE REGEX EXPRESSION AND STICK IT WITH SOME IFS AND RUN CONVERT DATE OKAY
+    """INEFFECTIVE CODE A PALOOZA :D 
     Given url text, returns list of dates that appear in it.
     Also, should ignore invalid dates."""
-    exp = "(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}"
-    #validates for mm-dd-yyyy format as of now
-    allDates = re.findall(exp,text)
-        L = []
-    for r in result:
-        L.append(r[0])
-    return L
 
-def convertDates(L):
+    dateList = []
+    
+#Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY.
+#DOES NOT INCLUDE M/D/YY OR MM/DD/YY GET ON THAT KATHY
+    DMYexp = "(0?[1-9]|1[012])[\/.-](0?[1-9]|[12][0-9]|3[01])[\/.-]\d{4}"
+    DMYDates = re.findall(DMYexp,text)
+    DMY = []
+    for r in DMYDates:
+        DMY.append(r)
+    dateList.append(DMY)
+
+#Searching for dates of MM/YYYY or MMM/YYYY or Month, YYYY format. 
+    MYexp = "(0?[1-9]|1[012]|January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\/.-]\s?\d{4}"
+    MYdates = re.findall(MYexp,text)
+    MY = []
+    for r in MYdates:
+        MY.append(r)
+    dateList.append(MY) 
+
+#Searching for dates of MMM DD, YYYY format. 
+    MDYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec).?\s(0?[1-9]|[12][0-9]|3[01]),?\s\d{4}"
+    MDYdates = re.findall(MDYexp,text)
+    MDY=[]
+    for r in MDYdates:
+        MDY.append(r)
+    dateList.append(MDY)
+
+    return dateList 
+
+
+
+def convertDates(dateList):
     """ Converts a date to the same format: mm/dd/yyyy 
-    Returns modified list."""
-    return L 
+    Returns modified date.
+    KATHY, DON'T FORGET TO USE re.match"""
+    return date
 
 def countDates(urls):
     """ Returns a dictionary with the date mentioned and the number of times it pops up."""
@@ -99,12 +124,8 @@ def countDates(urls):
 
 
 """to accomodate for: 
-   mm-dd-yyyy
-   mm-dd-yy
+   mm-dd-yy 
    yyyy-mm-dd
-   ^^those with / instead of -
-   Month Day, Year 
-   Perhaps MMM DD, YYYY (Apr 20, 2016) 
  
 THIS REGEX IS GONNA BE TERRIBS
 
