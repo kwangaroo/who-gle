@@ -25,7 +25,16 @@ def processURL(url):
     '''
     takes a url and returns the text of the url 
     '''
-    #bs4 stuff
+    text = ""
+    try:
+        u = urllib2.urlopen(url)
+        page = u.read()
+        soup = bs4.BeautifulSoup(page)
+        raw = soup.get_text()
+        text = re.sub("[\t\n]"," ",raw)
+    except:
+        "hi"
+    return text
 
 def allNames(L):
     '''
@@ -70,10 +79,12 @@ TODO
 - csv of names (?)
 '''
 
-print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
+#print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
 
+print getNames("who played spiderman")
 
 ### WHEN
+
 
 def getDates(text):
     """INEFFECTIVE CODE A PALOOZA :D 
