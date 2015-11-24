@@ -25,7 +25,16 @@ def processURL(url):
     '''
     takes a url and returns the text of the url 
     '''
-    #bs4 stuff
+    text = ""
+    try:
+        u = urllib2.urlopen(url)
+        page = u.read()
+        soup = bs4.BeautifulSoup(page)
+        raw = soup.get_text()
+        text = re.sub("[\t\n]"," ",raw)
+    except:
+        "hi"
+    return text
 
 def allNames(L):
     '''
@@ -70,8 +79,9 @@ TODO
 - csv of names (?)
 '''
 
-print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
+#print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
 
+print getNames("who played spiderman")
 
 ### WHEN
 
@@ -82,7 +92,7 @@ def getDates(text):
     exp = "(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}"
     #validates for mm-dd-yyyy format as of now
     allDates = re.findall(exp,text)
-        L = []
+    L = []
     for r in result:
         L.append(r[0])
     return L
