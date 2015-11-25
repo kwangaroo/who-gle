@@ -29,7 +29,7 @@ def processURL(url):
     try:
         u = urllib2.urlopen(url)
         page = u.read()
-        soup = bs4.BeautifulSoup(page)
+        soup = bs4.BeautifulSoup(page,"html.parser")
         raw = soup.get_text()
         text = re.sub("[\t\n]"," ",raw)
     except:
@@ -69,6 +69,15 @@ def getNames(query):
     urls = getURLs(query)
     return countNames(urls)
 
+def getTopNames(query,amt):
+    '''
+    gets a dictionary of names and occurrences for a query and returns
+    a specified amount of the top names
+    '''
+    d = getNames(query)
+    sorts = sorted(d.iteritems(),key=lambda(k,v):(-v,k))[:amt]
+    return sorts
+
 '''
 TODO
 - hyphenated names
@@ -76,12 +85,13 @@ TODO
 - JonAlf
 - Dr.
 - Initials
-- csv of names (?)
+- csv of names/words (?)
+- check if there's a name inside
 '''
 
 #print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
 
-print getNames("who played spiderman")
+print getTopNames("who killed abraham lincoln",20)
 
 ### WHEN
 
