@@ -10,5 +10,5 @@ def home():
 
 if __name__ == "__main__":
     app.debug = True
-    app.secret_key = "this is a secret key"
+    app.secret_key="Don't store this on github"
     app.run()
