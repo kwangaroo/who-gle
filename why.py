@@ -91,7 +91,7 @@ TODO
 
 #print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
 
-print getTopNames("who killed abraham lincoln",20)
+print getTopNames("who created stuycs",20)
 
 ### WHEN
 
