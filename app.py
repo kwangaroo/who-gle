@@ -7,6 +7,7 @@ def home():
 	if request.method == "POST":
 		why.getTopNames(request.form['searchterm'],20)
 		return render_template("home.html",results=sorts)
+	return render_template("home.html",results='No Search Has Been Done')   
 
 if __name__ == "__main__":
     app.debug = True
