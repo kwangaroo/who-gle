@@ -3,9 +3,13 @@ import urllib2, google, bs4, re
 ################################ WHO ###########################################
 
 def getURLs(query):
-    '''
-    gets a list of 10 urls returned when google searches query
-    '''
+    """
+    gets a list of 15 URLs returned when google searches query
+
+    :param query: string query to search for
+    
+    :retval: list of URLs as strings
+    """
     r = google.search(query,num=10,start=0,stop=15)
     l=[]
     for result in r:
@@ -13,11 +17,14 @@ def getURLs(query):
     return l
 
 def regNames(text):
-    '''
+    """
     uses regular expressions to return a list of names found in the text
-    '''
-    exp = "((([A-Z][a-z]+)|M([rs]|rs)\.)( [A-Z][a-z]+)+)"
-    exp = "(((([A-Z][a-z]+)|M([rs]|rs)\.)|Dr\.)( [A-Z][a-z]+)+)"
+
+    :param text: string of text to be processed
+    
+    :retval: list of names from text
+    """
+    #exp = "(((([A-Z][a-z]+)|M([rs]|rs)\.)|Dr\.)( [A-Z][a-z]+)+)"
     exp = "(((([A-Z][a-z]+)(\-([A-Z][a-z]+))*|M([rs]|rs)\.)|Dr\.)( ([A-Z][a-z]+)(\-([A-Z][a-z]+))*)+)"
     result = re.findall(exp, text)
     L = []
@@ -26,25 +33,35 @@ def regNames(text):
     return L
 
 def processURL(url):
-    '''
-    takes a url and returns the text of the url 
-    '''
-    text = ""
+    """
+    takes a URL and returns the text of the URL using urllib2 and BeautifulSoup
+    uses regex to remove some escape characters
+    if the URL cannot be opened, empty string is returned
+
+    :param url: a URL as a string
+    
+    :retval: string of text from url
+    """
     try:
         u = urllib2.urlopen(url)
         page = u.read()
         soup = bs4.BeautifulSoup(page,"html.parser")
         raw = soup.get_text()
         text = re.sub("[\t\n]"," ",raw)
+        return text
     except:
-        ""
-    return text
+        return ""
 
 def allNames(L):
-    '''
-    takes list of urls, uses process url to get the text from each one,
-    and uses getNames on the text and returns a list of name lists
-    '''
+    """
+    wrapper for processURL and regnames
+    takes list of urls, uses processURL to get the text from each one,
+    and uses getNames on the text and returns a list of the name lists
+
+    :param L: list of URLs as strings
+    
+    :retval: list of lists of names
+    """
     M = []
     for url in L:
         text = processURL(url)
@@ -52,10 +69,14 @@ def allNames(L):
     return M
 
 def countNames(M):
-    '''
-    takes list of urls, uses all names to get the 2d list of names,
+    """
+    takes list of URLs, uses allNames to get the 2d list of names,
     and then uses this to create a dictionary of {name : # of occurences} pairs
-    '''
+
+    :param M: list of URLs as strings
+    
+    :retval: dictionary of names and how many times they were found
+    """
     L = allNames(M)
     tally = {}
     for url in L:
@@ -67,17 +88,27 @@ def countNames(M):
     return tally
 
 def getNames(query):
-    '''
+    """
+    wrapper for getURLs and countNames
     gets a dictionary of names and occurrences for a query
-    '''
+
+    :param query: string query to search for
+    
+    :retval: dictionary of names and how many times they were found
+    """
     urls = getURLs(query)
     return countNames(urls)
 
 def getTopNames(query,amt):
-    '''
+    """
     gets a dictionary of names and occurrences for a query and returns
     a specified amount of the top names
-    '''
+
+    :param query: string query to search for
+    :param amt: int number of top names to return
+    
+    :retval: dictionary of names and how many times they were found
+    """
     d = getNames(query)
     sorts = sorted(d.iteritems(),key=lambda(k,v):(-v,k))[:amt]
     return sorts
@@ -94,7 +125,7 @@ print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-We
 print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Dr. Mike Zamansky")
 print regNames("Dyrland-Weaver Weaver-Dyrland")
 
-print getTopNames("who created stuycs",20)
+print getTopNames("who played spiderman",20)
 
 
 ################################ WHEN ###########################################
