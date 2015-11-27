@@ -1,10 +1,12 @@
 import urllib2, google, bs4, re
 
+################################ WHO ###########################################
+
 def getURLs(query):
     '''
     gets a list of 10 urls returned when google searches query
     '''
-    r = google.search(query,num=10,start=0,stop=10)
+    r = google.search(query,num=10,start=0,stop=15)
     l=[]
     for result in r:
         l.append(result)
@@ -15,6 +17,8 @@ def regNames(text):
     uses regular expressions to return a list of names found in the text
     '''
     exp = "((([A-Z][a-z]+)|M([rs]|rs)\.)( [A-Z][a-z]+)+)"
+    exp = "(((([A-Z][a-z]+)|M([rs]|rs)\.)|Dr\.)( [A-Z][a-z]+)+)"
+    exp = "(((([A-Z][a-z]+)(\-([A-Z][a-z]+))*|M([rs]|rs)\.)|Dr\.)( ([A-Z][a-z]+)(\-([A-Z][a-z]+))*)+)"
     result = re.findall(exp, text)
     L = []
     for r in result:
@@ -33,7 +37,7 @@ def processURL(url):
         raw = soup.get_text()
         text = re.sub("[\t\n]"," ",raw)
     except:
-        "hi"
+        ""
     return text
 
 def allNames(L):
@@ -80,21 +84,20 @@ def getTopNames(query,amt):
 
 '''
 TODO
-- hyphenated names
 - de/von/van/etc (?)
 - JonAlf
-- Dr.
 - Initials
 - csv of names/words (?)
-- check if there's a name inside
 '''
 
-#print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
+print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
+print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Dr. Mike Zamansky")
+print regNames("Dyrland-Weaver Weaver-Dyrland")
 
 print getTopNames("who created stuycs",20)
 
-### WHEN
 
+################################ WHEN ###########################################
 
 def getDates(text):
     """INEFFECTIVE CODE A PALOOZA :D 
