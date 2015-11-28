@@ -25,7 +25,9 @@ def regNames(text):
     :retval: list of names from text
     """
     #exp = "(((([A-Z][a-z]+)|M([rs]|rs)\.)|Dr\.)( [A-Z][a-z]+)+)"
-    exp = "(((([A-Z][a-z]+)(\-([A-Z][a-z]+))*|M([rs]|rs)\.)|Dr\.)( ([A-Z][a-z]+)(\-([A-Z][a-z]+))*)+)"
+    #exp = "(((([A-Z][a-z]+)(\-([A-Z][a-z]+))*|M([rs]|rs)\.)|Dr\.)( ([A-Z][a-z]+)(\-([A-Z][a-z]+))*)+)"
+    exp = "(((([A-Z][a-z]+([A-Z][a-z]+)*)(\-([A-Z][a-z]+))*|M([rs]|rs)\.)|Dr\.|[A-Z]\.)(( [A-Z]([a-z]+(\-[A-Z][a-z]+)*))|( [A-Z]\.))+)"
+    exp = "(((([A-Z][a-z]+([A-Z][a-z]+)*)(\-([A-Z][a-z]+([A-Z][a-z]+)*))*|M([rs]|rs)\.)|Dr\.|[A-Z]\.)(( [A-Z]([a-z]+([A-Z][a-z]+)*(\-[A-Z][a-z]+([A-Z][a-z]+)*)*))|( [A-Z]\.))+)"
     result = re.findall(exp, text)
     L = []
     for r in result:
@@ -113,20 +115,23 @@ def getTopNames(query,amt):
     sorts = sorted(d.iteritems(),key=lambda(k,v):(-v,k))[:amt]
     return sorts
 
-'''
+"""
 TODO
-- de/von/van/etc (?)
 - JonAlf
-- Initials
 - csv of names/words (?)
-'''
+"""
 
 print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mr. Dyrland-Weaver or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
-print regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Dr. Mike Zamansky")
+print regNames("Mr. Mike Zamansky or is it Dr. Mike Zamansky")
 print regNames("Dyrland-Weaver Weaver-Dyrland")
+print regNames("Dyrland-Weaver J. Weaver-Dyrland")
+print regNames("Mr. M. Z.")
+print regNames("J. S. Bach or is it Johann Sebastian Bach")
+print regNames("JonAlf Dyrland-Weaver or is it Johann Sebastian Bach")
 
-print getTopNames("who played spiderman",20)
-
+#print getTopNames("who played spiderman",20)
+#print getTopNames("who painted the starry night",20)
+#print getTopNames("who composed the fugue in d minor",20)
 
 ################################ WHEN ###########################################
 
