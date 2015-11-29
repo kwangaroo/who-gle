@@ -182,7 +182,8 @@ def getTopNames(query,amt):
     return sorts
 
 #print getTopNames("who played spiderman",10)
-print getTopNames("who is ruining america",10)
+#print getTopNames("who is ruining america",10)
+print "RESULTS ENTERED IN RESULTS.CSV"
 
 ################################ WHEN ###########################################
 
@@ -247,7 +248,7 @@ def getDateAns(query, amt):
     sorts = sorted(dateList.iteritems(),key=lambda(k,v):(-v,k))[:amt]
     return sorts
 
-print getDateAns("when was the war of 1812",15) 
+#print getDateAns("when was the war of 1812",15) 
 
 
 """to accomodate for: 

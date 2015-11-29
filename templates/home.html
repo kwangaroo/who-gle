@@ -75,16 +75,23 @@
   <!-- Main Content -->
   <div class="container">
 	<div class="text-center">
-		<form method="POST" action="/#contact">
+		<form method="get" action="/result">
 			<input type="text" name="searchterm" placeholder="What do you want to search?"; style="border-radius: 25px; border: 2px solid #000000; padding: 20px; width: 80%;color:#000000;">
 			<br>
 			<input type="submit" value="Search" style="border-radius: 25px; border: 2px solid #000000; color: #000000; padding: 20px; text-size:150%; margin:20px;">
 		</form>
-		<div id="contact">
-			{{results}}
-		</div>
 	</div>
   </div>
+  
+  <section id="contact">
+	<table border="1" style="width:100%">
+	    <col width="50%">
+	    <col width="50%">
+	    <tr>
+	      <td>{{results}}</td>
+	    </tr>
+	  </table>
+  </section>
 
   <!-- jQuery -->
   <script src="static/js/jquery.js"></script>
