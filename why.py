@@ -146,7 +146,6 @@ def getDates(text):
     dateList = []
     
 #Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY.
-#DOES NOT INCLUDE M/D/YY OR MM/DD/YY GET ON THAT KATHY
     DMYexp = "(0?[1-9]|1[012])[\/.-](0?[1-9]|[12][0-9]|3[01])[\/.-]\d{4}"
     DMYDates = re.findall(DMYexp,text)
     DMY = []
@@ -183,7 +182,24 @@ def convertDates(dateList):
 def countDates(urls):
     """ Returns a dictionary with the date mentioned and the number of times it pops up."""
     ct = {}
+    for url in urls:
+        text = processURL(url)
+        dateList = getDates(text)
+        for date in dateList:
+            if date in tally:
+                ct[name]+=1
+            else:
+                ct[name]=1
     return ct 
+
+def getDateAns(query, amt):
+    urls = getURLs(query)
+    dateList = countDates(urls)
+    #tf is ordering lol
+    sorts = sorted(dateList.iteritems(),key=lambda(k,v):(-v,k))[:amt]
+    return sorts
+
+print getDateAns("when was the war of 1812",15) 
 
 
 """to accomodate for: 
