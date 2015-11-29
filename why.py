@@ -1,4 +1,4 @@
-import urllib2, google, bs4, re
+import urllib2, google, bs4, re, csv
 
 ################################ WHO ###########################################
 
@@ -175,6 +175,10 @@ def getTopNames(query,amt):
     """
     d = getNames(query)
     sorts = sorted(d.iteritems(),key=lambda(k,v):(-v,k))[:amt]
+    with open('results.csv', 'wb') as csvfile:
+	  spamwriter = csv.writer(csvfile)
+	  for r in sorts:
+	    spamwriter.writerow((r))
     return sorts
 
 #print getTopNames("who played spiderman",10)
