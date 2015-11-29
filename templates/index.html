@@ -103,7 +103,7 @@
       <div class="download-section">
         <div class="download">
 	  <h2>Search...</h2>
-	  <form method="POST" action="answer">
+	  <form method="POST" action="/#contact">
 	    <input type="text" name="searchterm" placeholder="What do you want to search?"
 		   style="border-radius: 25px; border: 2px solid #ffffff; padding: 20px; width: 80%;color:#000000;">
 		<br>
@@ -127,8 +127,8 @@
 	    </tr>
             {% autoescape false %}
 	    <tr>
-	      <td>{{question}}</td>
-		  <td>{{results}}</td>
+	      <td>{{nyt}}</td>
+	      <td>{{twitter}}</td>
 	    </tr>
             {% endautoescape %}
 	  </table>

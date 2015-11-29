@@ -5,15 +5,20 @@ import why
 app = Flask(__name__)
 
 @app.route("/")
-def home():
-	return render_template("home.html",results='No Search Has Been Done')   
+def index():
+    return render_template("home.html",question='No Search Has Been Done',results='No Search Has Been Done')                 
 
-
-@app.route("/result")
-def result():
-    search = request.form['searchterm']
-    answer = why.getTopNames(search,20)
-    return render_template("home.html",results=answer)	
+@app.route("/answer", methods = ["GET", "POST"])
+def answer():
+    if request.form.has_key("searchterm") and request.form["searchterm"] != "":
+        question = request.form["searchterm"]
+        why.getTopNames(question,20)
+        f = open('results.csv','r')
+        results = f.read()
+        f.close()
+        results = results.decode('utf-8')
+        return render_template("home.html",question=question,results=results)
+    return render_template("home.html",question='No',results='No Search Has Been Done')  
 
 if __name__ == "__main__":
     app.debug = True
