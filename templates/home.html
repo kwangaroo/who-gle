@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Times Tweets</title>
+    <title>Who-gle</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
@@ -41,7 +41,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
-                    <i class="fa fa-play-circle"></i>  <span class="light">Times</span> Tweets
+                    <i class="fa fa-play-circle"></i>  <span class="light">Who-</span>Gle
                 </a>
             </div>
             
@@ -53,13 +53,7 @@
               <a href="#page-top"></a>
             </li>
             <li>
-              <a class="page-scroll" href="#about">About</a>
-            </li>
-            <li>
-              <a class="page-scroll" href="#download">Search</a>
-            </li>
-            <li>
-              <a class="page-scroll" href="#contact">Compare</a>
+              <a class="page-scroll" href="#contact">Results</a>
             </li>
           </ul>
         </div>
@@ -74,11 +68,15 @@
         <div class="container">
           <div class="row">
             <div class="col-md-8 col-md-offset-2">
-              <h1 class="brand-heading">Times Tweets</h1>
-              <p class="intro-text">A place to compare editorials and publicly curated content all with the click of a button.</p>
-              <h3>Created by:</h3>
-				<p>Caitlin Stanton, Alex Sosnovsky, and Liam Daly</p>
-			  <a href="#about" class="btn btn-circle page-scroll">
+              <h1 class="brand-heading">Who-gle</h1>
+              <p class="intro-text">What do you want to know?</p>
+              <form method="POST" action="answer">
+				<input type="text" name="searchterm" placeholder="What do you want to search?"
+		   style="border-radius: 25px; border: 2px solid #ffffff; padding: 20px; width: 80%;color:#000000;">
+		<br>
+	    <input type="submit" value="Search" style="border-radius: 25px; border: 2px solid #ffffff; color: #000000; padding: 20px; text-size:150%; margin:20px;">
+	  </form>
+			  <a href="#contact" class="btn btn-circle page-scroll">
                 <i class="fa fa-play-circle animated"></i>
               </a>
             </div>
@@ -87,51 +85,14 @@
       </div>
     </header>
 
-    <!-- About Section -->
-    <section id="about" class="container content-section text-center">
-      <div class="row">
-        <div class="content-section text-center">
-          <h2>About Times Tweets</h2>
-          <p>Ever wanted to search something, but didn't want to just scroll past tweets or just peruse through news articles? Well Times Tweets is the product for you.</p>
-		  <p>Type in whatever you want to search in the bar below, and automatically a feed of New York Times articles and Tweets related to that topic will pop up.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Download Section -->
-    <section id="download" class="content-section text-center">
-      <div class="download-section">
-        <div class="download">
-	  <h2>Search...</h2>
-	  <form method="POST" action="answer">
-	    <input type="text" name="searchterm" placeholder="What do you want to search?"
-		   style="border-radius: 25px; border: 2px solid #ffffff; padding: 20px; width: 80%;color:#000000;">
-		<br>
-	    <input type="submit" value="Search" style="border-radius: 25px; border: 2px solid #ffffff; color: #000000; padding: 20px; text-size:150%; margin:20px;">
-	  </form>
-
-      </div>
-    </section>
-
     <!-- Contact Section -->
     <section id="contact" class="container content-section text-center">
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-          <h2>and Compare!</h2>
-	  <table border="1" style="width:100%">
-	    <col width="50%">
-	    <col width="50%">
-	    <tr>
-	      <td><h3>New York Times</h3></td>
-	      <td><h3>Twitter</h3></td>
-	    </tr>
-            {% autoescape false %}
-	    <tr>
-	      <td>{{question}}</td>
-		  <td>{{results}}</td>
-	    </tr>
-            {% endautoescape %}
-	  </table>
+          <h2>You wanted to know...</h2>
+		  <p>{{question}}</p>
+	      <h2>And here you go...</h2>
+		  <p>{{results}}<p>
         </div>
       </div>
     </section>
@@ -139,7 +100,7 @@
     <!-- Footer -->
     <footer>
       <div class="container text-center">
-        <p>Copyright &copy; Times Tweets 2015</p>
+        <p>Copyright &copy; Who-gle 2015</p>
       </div>
     </footer>
 
