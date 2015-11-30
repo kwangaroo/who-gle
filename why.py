@@ -197,10 +197,9 @@ def regDates(text):
     Returns:
         list of dates found in text
     """
-
     dateList = []
     
-    "Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY."
+#Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY.
     DMYexp = "(0?[1-9]|1[012])[\/.-](0?[1-9]|[12][0-9]|3[01])[\/.-]([1-9][0-9][0-9][0-9])"
     DMYdates = re.findall(DMYexp,text)
     DMY = []
@@ -208,26 +207,48 @@ def regDates(text):
         DMYstr = "/".join(r)
         dateList.append(DMYstr)
 
-    "Searching for dates of MM/YYYY or MMM/YYYY or Month, YYYY format."
+#Searching for dates of MM/YYYY or MMM/YYYY or Month, YYYY format. 
     MYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[.,-]\s([1-9][0-9][0-9][0-9])"
     MYdates = re.findall(MYexp,text)
     MY = []
     for r in MYdates:
         MYstr = "/".join(r)
-        #dateStr = convertMonth(dateStr)
+        MYstr = convertMonth(MYstr)
         dateList.append(MYstr)
 
-    "Searching for dates of MMM DD, YYYY format."
+#Searching for dates of MMM DD, YYYY format. 
     MDYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec).?\s(0?[1-9]|[12][0-9]|3[01]),\s([1-9][0-9][0-9][0-9])"
     MDYdates = re.findall(MDYexp,text)
     MDY=[]
     for r in MDYdates:
         MDYstr = "/".join(r)
+        MDYstr = convertMonth(MDYstr)
         dateList.append(MDYstr)
 
     return dateList 
 
-def convertMonth(str): 
+#print getDates("September 3, 2014 or 11/29/1029 or duckie or October, 2039 or YOUR MOM or 2-3-2015")
+
+def convertMonth(str):
+    # (shrug emoji)
+    """Converts written out months into numbers to comply with a standard M/D/Y format. 
+    Arguments:
+        str: string that contains the offending month that isn't in number form
+    Returns: 
+        str: same string, with all instances of written out months replaced.
+"""
+
+    str = re.sub("January|Jan","1",str) 
+    str = re.sub("February|Feb","2",str) 
+    str = re.sub("March|Mar","3",str) 
+    str = re.sub("April|Apr","4",str) 
+    str = re.sub("June|Jun","6",str) 
+    str = re.sub("July|Jul","7",str) 
+    str = re.sub("August|Aug","8",str) 
+    str = re.sub("September|Sep","9",str) 
+    str = re.sub("October|Oct","10",str) 
+    str = re.sub("November|Nov","11",str) 
+    str = re.sub("December|Dec","12",str) 
     return str
 
 def countDates(urls):
