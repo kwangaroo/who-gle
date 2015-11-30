@@ -5,6 +5,7 @@ import urllib2, google, bs4, re, csv
 def getWords():
     """
     gets a list of stopwords from a csv for later filtering
+    
     Arguments:
         none
     
@@ -21,6 +22,7 @@ def getWords():
 def isStop(name,stops):
     """
     checks whether a name contains a stopword
+    
     Arguments:
         name: string name
         stops: list of stopwords as strings
@@ -36,6 +38,7 @@ def isStop(name,stops):
 def getURLs(query):
     """
     gets a list of 15 URLs returned when google searches query
+    
     Arguments:
         query: string query to search for
     
@@ -51,6 +54,7 @@ def getURLs(query):
 def regNames(text):
     """
     uses regular expressions to return a list of names found in the text
+    
     Arguments:
         text: string of text to be processed
     
@@ -80,10 +84,11 @@ def processURL(url):
     takes a URL and returns the text of the URL using urllib2 and BeautifulSoup
     uses regex to remove some escape characters
     if the URL cannot be opened, empty string is returned
+    
     Arguments:
         url: a URL as a string
     
-    Retuens:
+    Returns:
         string of text from url
     """
     try:
@@ -101,10 +106,11 @@ def allNames(L):
     wrapper for processURL and regnames
     takes list of urls, uses processURL to get the text from each one,
     and uses getNames on the text and returns a list of the name lists
+    
     Arguments:
         L: list of URLs as strings
     
-    Retuens:
+    Returns:
         list of lists of names
     """
     M = []
@@ -119,6 +125,7 @@ def countNames(M):
     and then uses this to create a dictionary of {name : # of occurences} pairs
     goes through the dictionary and takes out names that contain stopwords
     gets stopwords using getWords and checks names using isStop
+    
     Arguments:
         M: list of URLs as strings
     
@@ -143,6 +150,7 @@ def getNames(query):
     """
     wrapper for getURLs and countNames
     gets a dictionary of names and occurrences for a query
+    
     Arguments:
         query: string query to search for
     
@@ -156,6 +164,8 @@ def getTopNames(query,amt):
     """
     gets a dictionary of names and occurrences for a query and returns
     a specified amount of the top names
+    writes results to a csv
+    
     Arguments:
         query: string query to search for
         amt: int number of top names to return
@@ -168,7 +178,6 @@ def getTopNames(query,amt):
     with open('results.csv', 'wb') as csvfile:
 	  spamwriter = csv.writer(csvfile)
 	  for r in sorts:
-	    #content = r.text.encode('utf-8').strip() + "<br><br>"
 	    spamwriter.writerow((r))
     return sorts
 
@@ -177,14 +186,21 @@ def getTopNames(query,amt):
 
 ################################ WHEN ###########################################
 
-def getDates(text):
-    """INEFFECTIVE CODE A PALOOZA :D 
-    Given url text, returns list of dates that appear in it.
-    Also, should ignore invalid dates."""
+def regDates(text):
+    """
+    given url text, returns list of dates that appear in it
+    uses 3 different kinds of regex
+    
+    Arguments:
+        text: text string to be regex'd
+    
+    Returns:
+        list of dates found in text
+    """
 
     dateList = []
     
-#Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY.
+    "Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY."
     DMYexp = "(0?[1-9]|1[012])[\/.-](0?[1-9]|[12][0-9]|3[01])[\/.-]([1-9][0-9][0-9][0-9])"
     DMYdates = re.findall(DMYexp,text)
     DMY = []
@@ -192,37 +208,44 @@ def getDates(text):
         DMYstr = "/".join(r)
         dateList.append(DMYstr)
 
-#Searching for dates of MM/YYYY or MMM/YYYY or Month, YYYY format. 
+    "Searching for dates of MM/YYYY or MMM/YYYY or Month, YYYY format."
     MYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[.,-]\s([1-9][0-9][0-9][0-9])"
     MYdates = re.findall(MYexp,text)
     MY = []
     for r in MYdates:
         MYstr = "/".join(r)
-    #    dateStr = convertMonth(dateStr)
+        #dateStr = convertMonth(dateStr)
         dateList.append(MYstr)
 
-#Searching for dates of MMM DD, YYYY format. 
+    "Searching for dates of MMM DD, YYYY format."
     MDYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec).?\s(0?[1-9]|[12][0-9]|3[01]),\s([1-9][0-9][0-9][0-9])"
     MDYdates = re.findall(MDYexp,text)
     MDY=[]
     for r in MDYdates:
         MDYstr = "/".join(r)
-        #dateStr = convertMonth(dateStr)
         dateList.append(MDYstr)
 
     return dateList 
-
-#print getDates("September 3, 2014 or 11/29/1029 or duckie or October, 2039 or YOUR MOM or 2-3-2015")
 
 def convertMonth(str): 
     return str
 
 def countDates(urls):
-    """ Returns a dictionary with the date mentioned and the number of times it pops up."""
+    """
+    takes list of URLs, uses processURL to get the text of each URL,
+    and then uses regDates to get dates from the text, and uses
+    this to create a dictionary of {date : # of occurences} pairs
+    
+    Arguments:
+        urls: list of URLs as strings
+    
+    Returns:
+        dictionary of dates and how many times they were found
+    """
     ct = {}
     for url in urls:
         text = processURL(url)
-        dateList = getDates(text)
+        dateList = regDates(text)
         for date in dateList:
             if date in ct:  
                 ct[date]+=1
@@ -231,25 +254,29 @@ def countDates(urls):
     return ct 
 
 def getDateAns(query, amt):
+    """
+    gets a dictionary of dates and occurrences for a query and returns
+    a specified amount of the top dates
+    writes results to a csv
+    
+    Arguments:
+        query: string query to search for
+        amt: int number of top names to return
+    
+    Returns:
+        dictionary of dates and how many times they were found
+    """
     urls = getURLs(query)
     dateList = countDates(urls)
-    #tf is ordering lol
     sorts = sorted(dateList.iteritems(),key=lambda(k,v):(-v,k))[:amt]
+    with open('results.csv', 'wb') as csvfile:
+	  spamwriter = csv.writer(csvfile)
+	  for r in sorts:
+	    spamwriter.writerow((r))
     return sorts
 
+#print getDateAns("when is christmas",10)
 
-print getDateAns("when was the war of 1812",15)
-
-
-"""to accomodate for: 
-   mm-dd-yy 
-   yyyy-mm-dd
- 
-THIS REGEX IS GONNA BE TERRIBS
-Invalid Dates I May Or May Not Have To Care About: 
-Feb 29th for non-leap years (
-31st of feb, apr, jun, sept, nov 
-"""
 
 if __name__=="__main__":
     import doctest

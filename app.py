@@ -12,7 +12,12 @@ def index():
 def answer():
     if request.form.has_key("searchterm") and request.form["searchterm"] != "":
         question = request.form["searchterm"]
-        why.getTopNames(question,20)
+        if question[:3].lower() == "who":
+            why.getTopNames(question,10)
+        elif question[:4].lower() == "when":
+            why.getDateAns(question,5)
+        else:
+            return render_template("home.html",question=question,results='Invalid question!')
         f = open('results.csv','r')
         results = f.read()
         f.close()
