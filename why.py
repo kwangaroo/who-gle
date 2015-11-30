@@ -178,7 +178,8 @@ def getTopNames(query,amt):
     with open('results.csv', 'wb') as csvfile:
 	  spamwriter = csv.writer(csvfile)
 	  for r in sorts:
-	    spamwriter.writerow((r))
+	    content = r.encode('utf-8').strip() + "<br><br>"
+	    spamwriter.writerow((content))
     return sorts
 
 #print getTopNames("who played spiderman",10)
