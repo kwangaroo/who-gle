@@ -5,7 +5,6 @@ import urllib2, google, bs4, re, csv
 def getWords():
     """
     gets a list of stopwords from a csv for later filtering
-
     Arguments:
         none
     
@@ -22,7 +21,6 @@ def getWords():
 def isStop(name,stops):
     """
     checks whether a name contains a stopword
-
     Arguments:
         name: string name
         stops: list of stopwords as strings
@@ -38,7 +36,6 @@ def isStop(name,stops):
 def getURLs(query):
     """
     gets a list of 15 URLs returned when google searches query
-
     Arguments:
         query: string query to search for
     
@@ -54,13 +51,11 @@ def getURLs(query):
 def regNames(text):
     """
     uses regular expressions to return a list of names found in the text
-
     Arguments:
         text: string of text to be processed
     
     Returns:
         list of names from text
-
     >>> regNames("Mike Zamansky or is it Mr. Mike Zamansky or is it Mike Roft Zamansky or is it Mike Mike Zamansky Zamansky")
     ['Mike Zamansky', 'Mr. Mike Zamansky', 'Mike Roft Zamansky', 'Mike Mike Zamansky Zamansky']
     >>> regNames("Mr. Mike Zamansky or is it Dr. Mike Zamansky")
@@ -85,7 +80,6 @@ def processURL(url):
     takes a URL and returns the text of the URL using urllib2 and BeautifulSoup
     uses regex to remove some escape characters
     if the URL cannot be opened, empty string is returned
-
     Arguments:
         url: a URL as a string
     
@@ -107,7 +101,6 @@ def allNames(L):
     wrapper for processURL and regnames
     takes list of urls, uses processURL to get the text from each one,
     and uses getNames on the text and returns a list of the name lists
-
     Arguments:
         L: list of URLs as strings
     
@@ -126,7 +119,6 @@ def countNames(M):
     and then uses this to create a dictionary of {name : # of occurences} pairs
     goes through the dictionary and takes out names that contain stopwords
     gets stopwords using getWords and checks names using isStop
-
     Arguments:
         M: list of URLs as strings
     
@@ -151,7 +143,6 @@ def getNames(query):
     """
     wrapper for getURLs and countNames
     gets a dictionary of names and occurrences for a query
-
     Arguments:
         query: string query to search for
     
@@ -165,7 +156,6 @@ def getTopNames(query,amt):
     """
     gets a dictionary of names and occurrences for a query and returns
     a specified amount of the top names
-
     Arguments:
         query: string query to search for
         amt: int number of top names to return
@@ -195,38 +185,37 @@ def getDates(text):
     dateList = []
     
 #Searching for dates of MM/DD/YYYY format and compiling. This includes M/D/YYYY.
-    DMYexp = "(0?[1-9]|1[012])[\/.-](0?[1-9]|[12][0-9]|3[01])[\/.-]\d{4}"
-    DMYDates = re.findall(DMYexp,text)
+    DMYexp = "(0?[1-9]|1[012])[\/.-](0?[1-9]|[12][0-9]|3[01])[\/.-]([1-9][0-9][0-9][0-9])"
+    DMYdates = re.findall(DMYexp,text)
     DMY = []
-    for r in DMYDates:
-        DMY.append(r)
-    dateList.append(DMY)
+    for r in DMYdates:
+        DMYstr = "/".join(r)
+        dateList.append(DMYstr)
 
 #Searching for dates of MM/YYYY or MMM/YYYY or Month, YYYY format. 
-    MYexp = "(0?[1-9]|1[012]|January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\/.-]\s?\d{4}"
+    MYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[.,-]\s([1-9][0-9][0-9][0-9])"
     MYdates = re.findall(MYexp,text)
     MY = []
     for r in MYdates:
-        MY.append(r)
-    dateList.append(MY) 
+        MYstr = "/".join(r)
+    #    dateStr = convertMonth(dateStr)
+        dateList.append(MYstr)
 
 #Searching for dates of MMM DD, YYYY format. 
-    MDYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec).?\s(0?[1-9]|[12][0-9]|3[01]),?\s\d{4}"
+    MDYexp = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec).?\s(0?[1-9]|[12][0-9]|3[01]),\s([1-9][0-9][0-9][0-9])"
     MDYdates = re.findall(MDYexp,text)
     MDY=[]
     for r in MDYdates:
-        MDY.append(r)
-    dateList.append(MDY)
+        MDYstr = "/".join(r)
+        #dateStr = convertMonth(dateStr)
+        dateList.append(MDYstr)
 
     return dateList 
 
+#print getDates("September 3, 2014 or 11/29/1029 or duckie or October, 2039 or YOUR MOM or 2-3-2015")
 
-
-def convertDates(dateList):
-    """ Converts a date to the same format: mm/dd/yyyy 
-    Returns modified date.
-    KATHY, DON'T FORGET TO USE re.match"""
-    return date
+def convertMonth(str): 
+    return str
 
 def countDates(urls):
     """ Returns a dictionary with the date mentioned and the number of times it pops up."""
@@ -235,10 +224,10 @@ def countDates(urls):
         text = processURL(url)
         dateList = getDates(text)
         for date in dateList:
-            if date in tally:
-                ct[name]+=1
+            if date in ct:  
+                ct[date]+=1
             else:
-                ct[name]=1
+                ct[date]=1
     return ct 
 
 def getDateAns(query, amt):
@@ -248,7 +237,8 @@ def getDateAns(query, amt):
     sorts = sorted(dateList.iteritems(),key=lambda(k,v):(-v,k))[:amt]
     return sorts
 
-#print getDateAns("when was the war of 1812",15) 
+
+print getDateAns("when was the war of 1812",15)
 
 
 """to accomodate for: 
@@ -256,7 +246,6 @@ def getDateAns(query, amt):
    yyyy-mm-dd
  
 THIS REGEX IS GONNA BE TERRIBS
-
 Invalid Dates I May Or May Not Have To Care About: 
 Feb 29th for non-leap years (
 31st of feb, apr, jun, sept, nov 
@@ -264,4 +253,4 @@ Feb 29th for non-leap years (
 
 if __name__=="__main__":
     import doctest
-    doctest.testmod()   
+    doctest.testmod()  
